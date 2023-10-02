@@ -1,0 +1,83 @@
+{% include 'top.html' %}
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <div class="content">
+        <h1 class="title">Raw Badges Management</h1>
+		<p>Please see below for a list of badges, these can be assigned to students.</p>
+
+		<ul>
+			{% if badges == None%}
+				<p>No badges are currently in the system.</p>
+			{%else%}
+                <table id="badges" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for badge in badges %}
+                            <tr>
+                                <td>{{ badge.title }}</td>
+                                <td>{{ badge.description }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" id="delete" name="{{ badge.title }}&&&{{ badge.id }}" onclick="delete_badge(name)">Delete</button>
+                                </td>
+                            </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+
+                <script>
+                    $(document).ready( function () {
+                        $('#badges').DataTable({
+                            columns: [
+                                null,
+                                {orderable: false},
+                                {orderable: false, searchable: false}
+                            ],
+                        });
+                    } );
+
+                    function delete_badge(content) {
+                        $('#deleteModal').modal();
+                        var badge_title = content.split("&&&")[0]
+                        var badge_id = content.split("&&&")[1]
+                        document.getElementById('badgeName').innerHTML = badge_title;
+
+                        $('#submit').click(function () {
+                            document.body.innerHTML += '<form id="dynForm" action="/deletebadge" method="post"><input type="hidden" name="badgeId" value=' + badge_id + '><input type="hidden" name="badgeTitle" value=' + badge_title + '></form>';
+                            document.getElementById("dynForm").submit();
+                        })
+                    }
+                </script>
+			{%endif%}
+		</ul>
+
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #d94729">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Badge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p>You are about to delete the badge <i id="badgeName" style="text-decoration: underline"></i>.</p>
+                  <b>&#9888 This operation cannot be undone. Would you like to proceed?</b>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="submit">Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+{% include 'bottom.html' %}

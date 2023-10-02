@@ -1,0 +1,120 @@
+{% include 'top.html' %}
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.dataTables.min.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <div class="p-2">
+            <button class="btn float-start" style="background-color: #e64626; color: #FFFFFF" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i>  Previous step</button>
+            <button type="button" class="btn btn-success float-right" id="assign">Assign <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+        </div>
+
+        <h1 class="title">Assign Badge</h1>
+        <h3>2. Select student</h3>
+        <p>You are assigning badge type - <b>{{ badge.title }}</b></p>
+        <p>Please select student(s) you want to assign</p>
+
+		<ul>
+			{% if students == None%}
+				<p>No students are currently in the system.</p>
+			{%else%}
+                <table id="students" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+                            <td> </td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.id }}</td>
+                            </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+
+                <script>
+                    $(document).ready(function() {
+                    var table = $('#students').DataTable( {
+                        columnDefs: [ {
+                            orderable: false,
+                            className: 'select-checkbox',
+                            targets:   0
+                        } ],
+                        select: {
+                            style:    'multi',
+                            selector: 'td:first-child'
+                        },
+                        columns: [
+                            {orderable: false, searchable: false},
+                            null,
+                            {orderable: false, searchable: false}
+                        ]
+                    } );
+
+                    $('#students tbody').on('click', 'tr', function() {
+                        $(this).toggleClass('selected');
+                    } );
+
+                    $('#assign').click(function () {
+                        var selected_obj = table.rows('.selected').data()
+                        var names = ""
+                        for(var i=0; i < selected_obj.length-1; i++){
+                            names += selected_obj[i][1]
+                            names += "/"
+                        }
+                        names += selected_obj[selected_obj.length-1][1]
+                        var badge = {{ badge.id|tojson }}
+
+                        if (names === "") {
+                            e.preventDefault();
+                        }
+
+                        $('#descriptionModal').modal();
+
+                        document.getElementById("names").innerHTML = names;
+                        document.getElementById("badgeName").innerHTML = {{ badge.title|tojson }};
+
+                        $('#submit').click(function () {
+                        var desc = document.getElementById('description').value.replaceAll(" ", "_");
+                        names = names.replace(" ", "_")
+                        document.body.innerHTML += '<form id="dynForm" action="/assign_badge/operation" method="post"><input type="hidden" name="badgeId" value=' + badge + '><input type="hidden" name="students" value=' + names + '><input type="hidden" name="description" value=' + desc + '></form>';
+                        document.getElementById("dynForm").submit();
+                        });
+                    });
+
+                } );
+                </script>
+
+			{%endif%}
+		</ul>
+
+        <!-- Modal -->
+        <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #d94729">
+                <h5 class="modal-title" id="descriptionModalLabel">Assign Badge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p>You are about to assign badge <i id="badgeName" style="text-decoration: underline"></i> to following student: <i id="names"></i></p>
+                  <a style="font-size: 16px"><b>3. Please enter the description of the awarded badge (optional)</b></a>
+                  <input type="text" class="form-control" id="description" placeholder="">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submit">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+{% include 'bottom.html' %}

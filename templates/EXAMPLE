@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>USYD Digital Badges System</title>
+        <link rel="stylesheet" type="text/css" href="./static/css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="body-container">
+            <div class="header">
+                <div class="header-container">
+                    <div class="row">
+                        <div class="pull-left">
+                            <img alt="USYD logo" src="./static/pic/logo.png" width="171" height="54" style="padding-right: 10pt">
+                        </div>
+                        <div class="pull-right">
+                            <a href="{{ url_for('index') }}">Digital Badges</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr style="height:2px; width:100%; border-width:0; color:orange; background-color:orange">
+
+            /*
+            =========================================
+            Everything above is content for top.html
+            =========================================*/
+            /* Everything below is content for each different page [Only need to copy this part to your own file]*/
+
+            <div class="content">
+                <div class="index">
+                    <h1 class="title"> Welcome</h1>
+
+                    <div class="component">
+                        <button> Visitor </button>
+                        <br>
+                        <button> Staff </button>
+                        <br>
+                        <button> Student </button>
+                    </div>
+                </div>
+            </div>
+
+        /*
+        ===========================================
+        Everything below is content for bottom.html
+        ===========================================*/
+        </div>
+        <footer class="page-footer">
+            <div class="container">
+                <ul>
+                    <li><span>Copyright &copy; 2022 ISYS3888 Capstone Project</span></li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<script>
+    setTimeout(() => {
+        const box = document.getElementById('notification');
+        box.style.display = 'none';
+    }, 6*1000); // notification bar stay for 6s
+</script>
+<html>
+    <head>
+        <title>USYD Digital Badges System</title>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='pic/logo.ico') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+    </head>
+                    {% if 'user_name' in session %}
+                    <body class="d-flex flex-column min-vh-100">
+
+                        <header class="header-container container-fluid" style="background-color: #e64626;">
+                            <div class="container">
+                                <div class="float-left">
+                                    <img alt="USYD logo" src="{{ url_for('static', filename='pic/logo.png') }}" width="171" height="54" style="padding-right: 10pt">
+                                </div>
+                                <div class="float-right">
+                      <button type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('staff_home', staff_id = session.user_id) }}'">Home</button>
+                      <button type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+                      <a class="website-name" href="{{ url_for('index') }}">Digital Badges</a>
+                    </div>
+                </div>
+            </header>
+    
+            <br/>
+                    {% else %}
+                    <body class="d-flex flex-column min-vh-100">
+
+                        <header class="header-container container-fluid">
+                            <div class="container">
+                                <div class="float-left">
+                                    <img alt="USYD logo" src="{{ url_for('static', filename='pic/logo.png') }}" width="171" height="54" style="padding-right: 10pt">
+                                </div>
+                                <div class="float-right">
+                        {% if hideStaffButton != True %}
+                            <button type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('staff_login') }}'">Staff Login</button>
+                        {% endif %}
+                        <a class="website-name" href="{{ url_for('index') }}">Digital Badges</a>
+                    </div>
+                </div>
+            </header>
+    
+            <hr style="height:1px; width:100%; border-width:0; color:#d94729; background-color:#d94729;">
+    
+                    {% endif %}
+               
+        <div class="container">
+            <div class="flashes" id="notification">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if session.error == True %}
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-times" aria-hidden="true"></i> <strong>Error</strong> <br>
+                                    {{message}}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success">
+                                    <i class="fa fa-check" aria-hidden="true"></i> <strong>Success</strong> <br>
+                                    {{message}}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>

@@ -1,0 +1,7 @@
+Flask
+Flask_Session
+psycopg2
+py-bcrypt
+qrcode
+pillow
+waitress

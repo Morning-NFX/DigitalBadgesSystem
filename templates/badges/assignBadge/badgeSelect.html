@@ -1,0 +1,48 @@
+{% include 'top.html' %}
+    <div class="content">
+        <h1 class="title">Assign Badge</h1>
+        <h3>1. Select raw badge</h3>
+		<p>Please select the raw badge you want to assign</p>
+
+		<ul>
+			{% if badges == None%}
+				<p>No badges are currently in the system.</p>
+			{%else%}
+                <table id="badges" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for badge in badges %}
+                            <tr>
+                                <td>{{ badge.title }}</td>
+                                <td>{{ badge.description }}</td>
+                                <td>
+                                    <a type="button" class="btn btn-success" href="{{ url_for('assign_badge_student', badge_id=badge.id) }}">Assign</a>
+                                </td>
+                            </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+
+                <script>
+                    $(document).ready( function () {
+                        $('#badges').DataTable({
+                            "lengthChange": false,
+                            "pageLength": 5,
+                            columns: [
+                                null,
+                                {orderable: false},
+                                {orderable: false, searchable: false}
+                            ],
+                        });
+                    } );
+                </script>
+			{%endif%}
+		</ul>
+    </div>
+{% include 'bottom.html' %}

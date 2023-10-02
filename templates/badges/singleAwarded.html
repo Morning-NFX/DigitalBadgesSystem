@@ -1,0 +1,53 @@
+{% include 'top.html' %}
+<div class="outer-border m-auto d-flex justify-content-center flex-column align-items-center">
+    <div class="inner-dotted-border qr-code-certificate-container d-flex flex-column justify-content-around align-items-start">
+
+        <div class="d-flex justify-content-between">
+          <span class="certification">{{data.title}} Badge Certificate</span>
+          <img src="../../static/pic/tick.png" class="rounded float-right align-top" alt="..." style="width:7%">
+        </div>
+        <div class="d-flex justify-content-evenly flex-column">
+          <span class="certify m-1"><i>This is to certify that</i></span>
+          <span class="name m-2 ml-5"><b>{{data.name}}</b></span><br/><br/>
+          <span class="certify m-2">has been awarded a <b>{{data.title}}</b> Badge on <b><span>{{data.date_issued_formatted}}</span></b></span> <br/><br/>
+        </div>
+
+          <div class="badge-description d-flex flex-column p-2 pl-4 pr-4 m-2 w-100">
+            <span class="fs-20"></br><i>"{{data.issued_for}}"</br></i></span> 
+            {% if data.curricular == 1 %}
+              <span class="fs-20 align-self-end">- {{data.staff_name}} (Curricular)</span>
+          {% endif %}
+          {% if data.curricular == 0 %}
+              <span class="fs-20 align-self-end">- {{data.staff_name}} (Co-curricular)</span>
+            {% endif %}
+          </div>
+          <div class="align-self-end d-flex flex-row justify-content-between align-items-center w-100">
+
+              <div class="d-flex flex-column align-self-start">
+                <div class="d-flex flex-row justify-content-center">
+                  <img class="qr-code-certificate" src="../../static/images/qr/{{data.id}}.png">      
+                  
+                  <span class="align-self-center scan">Scan </br>to verify</br>authenticity</span>         
+                </div>
+                <div class="badge-id align-self-start">
+                  <h6 style="font-size: 10px;">{{data.id}}</h6>
+                </div>
+              </div>
+
+
+              <div class="d-flex flex-column align-self-end">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <img alt="USYD logo"  src="{{ url_for('static', filename='pic/logo.png') }}" width="171" height="54" style="padding-right: 10pt">
+                  <div>
+                    <p>Digital Badges Initiative</p>
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+    
+    </div>
+</div>
+<br/>
+{% include 'bottom.html'%}
+
